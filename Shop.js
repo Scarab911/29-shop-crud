@@ -1,10 +1,12 @@
 class Shop {
-    constructor() {
+    constructor(shopName, currency) {
         this.productsList = [];
-
+        this.usersList = [];
+        this.shop = shopName;
+        this.currency = currency
     }
     intro() {
-        console.log('Hi, we are "Meskiuko kioskas"');
+        console.log(`Hi, we are "${this.shop}".\nUse .items() method to get list of items to purchase.\nUse .order() method to get your order details.`);
     };
 
     addItem(item, price) {
@@ -14,10 +16,11 @@ class Shop {
             return false;
         }
         let product = item;
-        let kaina = price / 100;
-        this.productsList.push({ product, price });
+        let kaina = (price / 100);
+        const kainaToShow = kaina.toFixed(2);
+        this.productsList.push({ product, kaina });
 
-        console.log(`"Meskiuko kioskas" sells ${product} for ${kaina} EUR now!`);
+        console.log(`"Meskiuko kioskas" sells ${product} for ${kainaToShow} ${this.currency} now!`);
     };
 
     items() {
@@ -26,16 +29,35 @@ class Shop {
 
         for (let i = 0; i < this.productsList.length; i++) {
             const item = this.productsList[i];
-            console.log(`${i + 1}) ${item.product} - ${item.price} EUR;`);
+            console.log(`${i + 1}) ${item.product} - ${(item.kaina).toFixed(2)} EUR;`);
         }
         console.log('====================');
     };
 
-    updatePrice() { };
+    updatePrice(name, newPrice) {
+        let updatedProduct = this.productsList.find(item => item.product === name)
+        updatedProduct.kaina = (newPrice / 100);
+    };
 
-    createCart() { };
+    createCart(owner) {
+        if (!this.isValidUserName(owner)) {
+            return false
+        }
+        this.usersList.push({ owner, items: [] })
+        console.log(`${owner} have an open cart at "${this.shop}"!`);
+    };
 
-    addItemToCart() { };
+    addItemToCart(owner, index, index2) {
+        // let user = this.usersList.find(owner);
+        // console.log(user);
+        // for (let i = 0; i < this.productsList.length; i++) {
+        //     const product = this.productsList[i];
+        //     if ((index - 1) === i) {
+        //         this.usersList[owner].items.push({ product });
+        //     }
+        // }
+        console.log(this.usersList[items]);
+    };
 
     order() { };
 
@@ -65,5 +87,16 @@ class Shop {
         }
         return true;
     }
+    isValidUserName(name) {
+        if (typeof name !== 'string' ||
+            name === '' ||
+            name === undefined ||
+            name.length < 2 ||
+            name[0] !== name[0].toUpperCase()) {
+            console.error('ERROR: wrong user name, must be atleast two letters, first uppercase string');
+            return false;
+        }
+        return true;
+    };
 }
 module.exports = Shop;
