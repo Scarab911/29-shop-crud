@@ -42,7 +42,7 @@ onlineKioskas.createCart('Augustas');
 
 onlineKioskas.createCart('Barbora');
 // Barbora have an open cart at "Meskiuko kioskas"!
-console.log(onlineKioskas);
+
 onlineKioskas.addItemToCart('Augustas', 2, 1);
 onlineKioskas.addItemToCart('Augustas', 4, 2);
 onlineKioskas.addItemToCart('Augustas', 5, 1);

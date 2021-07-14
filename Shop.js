@@ -4,6 +4,7 @@ class Shop {
         this.usersList = [];
         this.shop = shopName;
         this.currency = currency
+
     }
     intro() {
         console.log(`Hi, we are "${this.shop}".\nUse .items() method to get list of items to purchase.\nUse .order() method to get your order details.`);
@@ -47,21 +48,32 @@ class Shop {
         console.log(`${owner} have an open cart at "${this.shop}"!`);
     };
 
-    addItemToCart(owner, index, index2) {
-        // let user = this.usersList.find(owner);
-        // console.log(user);
-        // for (let i = 0; i < this.productsList.length; i++) {
-        //     const product = this.productsList[i];
-        //     if ((index - 1) === i) {
-        //         this.usersList[owner].items.push({ product });
-        //     }
-        // }
-        console.log(this.usersList[items]);
+    addItemToCart(name, id, count) {
+        if (!this.isValidUserName(name)) {
+            return false
+        }
+
+        for (let cart of this.usersList) {
+            if (cart.owner === name) {
+                cart.items.push({ id, count })
+            }
+        }
     };
 
-    order() { };
+    order(name) {
 
-    orderPrice() { };
+        for (let cart of this.usersList) {
+            if (cart.owner === name) {
+                console.log(`${name} pilnas uzsakymas`, cart);
+            }
+        }
+    };
+
+    orderPrice(name) {
+
+
+        console.log(`${name} order: ${'kaskiek'} ${this.currency}`);
+    };
 
     removeItem() { };
 
