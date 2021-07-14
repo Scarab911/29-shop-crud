@@ -19,7 +19,7 @@ class Shop {
         let product = item;
         let kaina = (price / 100);
         const kainaToShow = kaina.toFixed(2);
-        this.productsList.push({ product, kaina });
+        this.productsList.push({ product, kaina: price, available: true });
 
         console.log(`"Meskiuko kioskas" sells ${product} for ${kainaToShow} ${this.currency} now!`);
     };
@@ -27,24 +27,28 @@ class Shop {
     items() {
         console.log('Items for sale at "Meskiuko kioskas":');
         console.log('====================');
-
+        let idCount = 0;
         for (let i = 0; i < this.productsList.length; i++) {
             const item = this.productsList[i];
-            console.log(`${i + 1}) ${item.product} - ${(item.kaina).toFixed(2)} EUR;`);
+            if (item.available) {
+                idCount++;
+
+                console.log(`${idCount}) ${item.product} - ${((item.kaina) / 100).toFixed(2)} EUR;`);
+            }
         }
         console.log('====================');
     };
 
     updatePrice(name, newPrice) {
         let updatedProduct = this.productsList.find(item => item.product === name)
-        updatedProduct.kaina = (newPrice / 100);
+        updatedProduct.kaina = (newPrice);
     };
 
     createCart(owner) {
         if (!this.isValidUserName(owner)) {
             return false
         }
-        this.usersList.push({ owner, items: [] })
+        this.usersList.push({ owner, items: [], isPaid: false })
         console.log(`${owner} have an open cart at "${this.shop}"!`);
     };
 
@@ -52,6 +56,19 @@ class Shop {
         if (!this.isValidUserName(name)) {
             return false
         }
+        /*check if buyer exists, if not add it to the list */
+        const isPerson = this.usersList.some(person => person.owner === name)
+
+        if (!isPerson) {
+            this.createCart(name);
+        }
+        /* Checks if cart already been paid out or not */
+        if (!this.isPaid(name)) {
+            console.log(`----------`);
+            return false
+        }
+        /*Checks if item available */
+
 
         for (let cart of this.usersList) {
             if (cart.owner === name) {
@@ -61,6 +78,9 @@ class Shop {
     };
 
     order(name) {
+        if (!this.isValidUserName(name)) {
+            return false
+        }
 
         for (let cart of this.usersList) {
             if (cart.owner === name) {
@@ -70,14 +90,62 @@ class Shop {
     };
 
     orderPrice(name) {
+        if (!this.isValidUserName(name)) {
+            return false
+        }
 
+        let cart = [];
+        for (const user of this.usersList) {
+            if (user.owner === name) {
+                cart = user.items;
+                break;
+            }
+        }
 
-        console.log(`${name} order: ${'kaskiek'} ${this.currency}`);
+        let needToPay = 0;
+        for (let i = 0; i < cart.length; i++) {
+            const product = cart[i];
+            const index = product.id - 1;
+            needToPay += product.count * this.productsList[index].kaina;
+        }
+        console.log(`${name} order: ${(needToPay / 100).toFixed(2)} ${this.currency}`);
+        return needToPay;
     };
 
-    removeItem() { };
+    removeItem(item) {
+        for (const daiktas of this.productsList) {
 
-    pay() { };
+            if (daiktas.product === item) {
+                daiktas.available = false;
+            }
+        }
+    };
+
+    pay(name, cash) {
+
+        const moketi = this.orderPrice(name);
+
+        const graza = cash - moketi;
+
+        if (graza < 0) {
+            console.log('Need more money!');
+            return false;
+        }
+        if (graza === 0) {
+            console.log(`Thank you for purchasing at "${this.shop}"!`);
+
+        }
+        else {
+            console.log(`Here is your ${(graza / 100).toFixed(2)} ${this.currency} change!\nThank you for purchasing at "${this.shop}"!`);
+        }
+        for (const user of this.usersList) {
+            if (user.owner === name) {
+                user.isPaid = true;
+            }
+        }
+    };
+
+    orderPrice() { };
 
     shopSummary() { };
 
@@ -110,5 +178,14 @@ class Shop {
         }
         return true;
     };
+    isPaid(name) {
+        for (const user of this.usersList) {
+            if (user.owner === name &&
+                user.isPaid === true) {
+                console.error(`You can not add items to already paid cart!`);
+                return false
+            }
+        } return true;
+    }
 }
 module.exports = Shop;

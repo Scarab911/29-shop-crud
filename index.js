@@ -87,11 +87,13 @@ onlineKioskas.removeItem('obuolys');
 onlineKioskas.removeItem('morka');
 // No more obuolys at "Meskiuko kioskas"!
 
-onlineKioskas.pay('Augustas', 500);
+onlineKioskas.items();
+
+onlineKioskas.pay('Augustas', 400);
 // Need more money!
 
-onlineKioskas.pay('Augustas', 600);
-// Here is your 0.70 EUR change!\nThank you for purchasing at "Meskiuko kioskas"!
+onlineKioskas.pay('Augustas', 500);
+// Here is your 0.60 EUR change!\nThank you for purchasing at "Meskiuko kioskas"!
 
 onlineKioskas.pay('Barbora', 550);
 // Thank you for purchasing at "Meskiuko kioskas"!
@@ -117,9 +119,10 @@ onlineKioskas.order('John');
     ]
 }
 */
+console.log(onlineKioskas);
 
 onlineKioskas.orderPrice('John');
-// Augustas order: 5.60 EUR.
+// John order: 5.60 EUR.
 
 onlineKioskas.shopSummary();
 // Summary for the "Meskiuko kioskas"
