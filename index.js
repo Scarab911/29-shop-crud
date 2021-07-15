@@ -141,5 +141,3 @@ onlineKioskas.shopSummary();
 // Profit: 9.90 EUR
 // Possible profit: 4.70 EUR
 // ====================
-
-console.log(onlineKioskas);

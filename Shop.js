@@ -81,6 +81,7 @@ class Shop {
         if (!this.productsList[id - 1].available) {
             console.log(`-----STOP-----`);
             console.log(`Item is out of stock!`)
+            console.log(`-----STOP-----`);
             return false
         }
 
@@ -213,7 +214,9 @@ class Shop {
         for (const user of this.usersList) {
             if (user.owner === name &&
                 user.isPaid === true) {
+                console.log(`-----STOP-----`);
                 console.error(`You can not add items to already paid cart!`);
+                console.log(`-----STOP-----`);
                 return false
             }
         } return true;
