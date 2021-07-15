@@ -37,6 +37,17 @@ onlineKioskas.items();
 onlineKioskas.updatePrice('bulves', 90);
 // "Meskiuko kioskas" updated price and sells bulves for 0.90 EUR now!
 
+onlineKioskas.items();
+// KOMENTARAS: pavadinimai "gramatiskai taisyklingai"
+// Items for sale at "Meskiuko kioskas":
+// ====================
+// 1) Obuolys - 1.30 EUR;
+// 2) Morka - 0.65 EUR;
+// 3) Arbata - 0.95 EUR;
+// 4) Bulves - 0.90 EUR;
+// 5) Cepelinai - 1.95 EUR;
+// ====================
+
 onlineKioskas.createCart('Augustas');
 // Augustas have an open cart at "Meskiuko kioskas"!
 
@@ -87,8 +98,6 @@ onlineKioskas.removeItem('obuolys');
 onlineKioskas.removeItem('morka');
 // No more obuolys at "Meskiuko kioskas"!
 
-onlineKioskas.items();
-
 onlineKioskas.pay('Augustas', 400);
 // Need more money!
 
@@ -119,17 +128,18 @@ onlineKioskas.order('John');
     ]
 }
 */
-console.log(onlineKioskas);
 
 onlineKioskas.orderPrice('John');
-// John order: 5.60 EUR.
+// John order: 4.70 EUR.
 
 onlineKioskas.shopSummary();
 // Summary for the "Meskiuko kioskas"
 // ====================
-// Items sold: 12
+// Items sold: 8
 // Orders completed: 2
 // Orders in progress: 1
-// Profit: 10.80 EUR
-// Possible profit: 5.60 EUR
+// Profit: 9.90 EUR
+// Possible profit: 4.70 EUR
 // ====================
+
+console.log(onlineKioskas);

@@ -5,6 +5,13 @@ class Shop {
         this.shop = shopName;
         this.currency = currency
 
+        this.totalItemsSold = 0;
+        this.ordersCompleted = 0;
+        this.ordersInProgress = 0;
+        this.profit = 0;
+        this.possibleProfit = 0;
+
+
     }
     intro() {
         console.log(`Hi, we are "${this.shop}".\nUse .items() method to get list of items to purchase.\nUse .order() method to get your order details.`);
@@ -62,6 +69,7 @@ class Shop {
         if (!isPerson) {
             this.createCart(name);
         }
+
         /* Checks if cart already been paid out or not */
         if (!this.isPaid(name)) {
             console.log(`----------`);
@@ -70,6 +78,13 @@ class Shop {
         /*Checks if item available */
 
 
+        if (!this.productsList[id - 1].available) {
+            console.log(`-----STOP-----`);
+            console.log(`Item is out of stock!`)
+            return false
+        }
+
+        //adds items to cart
         for (let cart of this.usersList) {
             if (cart.owner === name) {
                 cart.items.push({ id, count })
@@ -110,6 +125,7 @@ class Shop {
         }
         console.log(`${name} order: ${(needToPay / 100).toFixed(2)} ${this.currency}`);
         return needToPay;
+
     };
 
     removeItem(item) {
@@ -124,7 +140,6 @@ class Shop {
     pay(name, cash) {
 
         const moketi = this.orderPrice(name);
-
         const graza = cash - moketi;
 
         if (graza < 0) {
@@ -141,13 +156,29 @@ class Shop {
         for (const user of this.usersList) {
             if (user.owner === name) {
                 user.isPaid = true;
+                this.profit += moketi;
+                ++this.ordersCompleted
+                break;
             }
         }
+
     };
 
-    orderPrice() { };
+    shopSummary() {
+        this.itemsSold()
+        //galimas uzdarbis
+        this.turnOver();
 
-    shopSummary() { };
+        //viso uzsakymu
+        this.ordersInProgress = this.totalOrders() - this.ordersCompleted;
+        //parduotuves isklotine
+        let summary = `Items sold: ${this.totalItemsSold}\nOrders completed: ${this.ordersCompleted}\nOrders in progress: ${this.ordersInProgress}\nProfit: ${((this.profit) / 100).toFixed(2)} ${this.currency}\nPossible profit: ${((this.possibleProfit) / 100).toFixed(2)} ${this.currency}';`
+
+        console.log(`Summary for the "${this.shop}"`);
+        console.log('====================');
+        console.log(summary);
+        console.log('====================');
+    };
 
     isValidProductName(itemName) {
         if (typeof itemName !== 'string' ||
@@ -186,6 +217,33 @@ class Shop {
                 return false
             }
         } return true;
+    }
+    itemsSold() {
+        let soldItems = [];
+        for (const cart of this.usersList) {
+            if (cart.isPaid) {
+                soldItems = soldItems.concat(cart.items);
+            }
+            this.ordersInProgress++
+        }
+
+        for (let sold of soldItems) {
+            this.totalItemsSold += sold.count;
+        }
+    }
+    totalOrders() {
+        let totalOrders = 0;
+        for (const cart of this.usersList) {
+            totalOrders++;
+        }
+        return totalOrders
+    }
+    turnOver() {
+        let turnOver = 0;
+        for (let cart of this.usersList) {
+            turnOver += this.orderPrice(cart.owner);
+        }
+        this.possibleProfit = turnOver - this.profit;
     }
 }
 module.exports = Shop;
